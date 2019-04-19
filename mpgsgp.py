@@ -27,7 +27,7 @@ class MPGSGP:
         bests = []
         avgs = []
         for sim in self.tree:
-            _, best, avg = sim.evolve(generations)
+            _, acg, best = sim.evolve(generations)
             bests.append(best)
             avgs.append(avg)
         return bests, avgs
