@@ -174,9 +174,10 @@ class GSGP:
                 # p1, p2 = self._tournament_selection(parent_pop)
                 # self.pop[i] = self.mutation(self.crossover(p1, p2))
 
+            self.pop = parent_pop.copy()
             for i in range(tp, self.pop_size):
                 p1, p2 = random.sample(parent_pop, 2)
-                self.pop[i] = self.mutation(self.crossover(p1, p2))
+                self.pop.append(self.mutation(self.crossover(p1, p2)))
 
             # for i in range(self.pop_size):
             #     p1, p2 = random.sample(parent_pop, 2)
