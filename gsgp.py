@@ -156,14 +156,14 @@ class GSGP:
                 past_avg_fit_convergence_counter = 0
 
 
-            for i in range(self.pop_size):
-                p1, p2 = self._tournament_selection(parent_pop)
-                self.pop[i] = self.mutation(self.crossover(p1, p2))
-
-            # parent_pop = self._get_parent_pop(parent_pop)
             # for i in range(self.pop_size):
-            #     p1, p2 = random.sample(parent_pop, 2)
-            #     self.pop[i] = self.mutation(self.crossover(p1, p2))
+                # p1, p2 = self._tournament_selection(parent_pop)
+                # self.pop[i] = self.mutation(self.crossover(p1, p2))
+
+            parent_pop = self._get_parent_pop(parent_pop)
+            for i in range(self.pop_size):
+                p1, p2 = random.sample(parent_pop, 2)
+                self.pop[i] = self.mutation(self.crossover(p1, p2))
             # self.pop = self._get_parent_pop(parent_pop)
             # self._do_crossover_mutation(parent_pop)
 
