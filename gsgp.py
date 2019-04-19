@@ -102,9 +102,14 @@ class GSGP:
             
         fit = 0
         for i, elements in enumerate(X):
-            fit += abs(int(t[i]) - self._get_value(individual, elements))
+            if int(t[i]) != self._get_value(individual, elements):
+                fit += 1
+
+
+            # fit += abs(int(t[i]) - self._get_value(individual, elements))
         
-        return min(fit / len(X), self.max_fitness)
+        return fit
+        # return min(fit / len(X), self.max_fitness)
 
     def _tournament_selection(self, parents):
         out = []
