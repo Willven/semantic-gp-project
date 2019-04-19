@@ -86,6 +86,14 @@ class GSGP:
     def _get_initial_pop(self):
         return [ self.random_function() for i in range(self.pop_size) ]
     
+
+    def _get_value(self, individual, elements):
+        val = individual(*elements)
+        if val > 7:
+            return 7
+        if val < 0:
+            return 0
+        return val
         
     def fitness(self, individual, X=None, t=None):
         if (X is None) or (t is None):
@@ -94,7 +102,7 @@ class GSGP:
             
         fit = 0
         for i, elements in enumerate(X):
-            fit += abs(int(t[i]) - int(individual(*elements)))
+            fit += abs(int(t[i]) - self._get_value(individual, elements))
         
         return min(fit / len(X), self.max_fitness)
 
