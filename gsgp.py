@@ -155,7 +155,8 @@ class GSGP:
             
             loop.set_description(desc_template.format(gen, sorted_pop[0][0], avg_fit, self.best_fitness))
 
-            parent_pop = sorted_pop[:int(self.trunc_ratio * self.pop_size)]
+            tp = int(self.trunc_ratio * self.pop_size)
+            parent_pop = sorted_pop[:tp]
             
             if avg_fit == past_avg_fit:
                 past_avg_fit_convergence_counter += 1
@@ -167,14 +168,19 @@ class GSGP:
                 past_avg_fit_convergence_counter = 0
 
 
+            parent_pop = self._get_parent_pop(parent_pop)
+
             # for i in range(self.pop_size):
                 # p1, p2 = self._tournament_selection(parent_pop)
                 # self.pop[i] = self.mutation(self.crossover(p1, p2))
 
-            parent_pop = self._get_parent_pop(parent_pop)
-            for i in range(self.pop_size):
+            for i in range(tp, self.pop_size):
                 p1, p2 = random.sample(parent_pop, 2)
                 self.pop[i] = self.mutation(self.crossover(p1, p2))
+
+            # for i in range(self.pop_size):
+            #     p1, p2 = random.sample(parent_pop, 2)
+            #     self.pop[i] = self.mutation(self.crossover(p1, p2))
             # self.pop = self._get_parent_pop(parent_pop)
             # self._do_crossover_mutation(parent_pop)
 
