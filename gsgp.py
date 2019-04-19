@@ -93,7 +93,7 @@ class GSGP:
             return 7
         if val < 0:
             return 0
-        return val
+        return int(val)
         
     def fitness(self, individual, X=None, t=None):
         if (X is None) or (t is None):
@@ -102,9 +102,7 @@ class GSGP:
             
         fit = 0
         for i, elements in enumerate(X):
-            if int(t[i]) != self._get_value(individual, elements):
-                fit += 1
-
+            fit += abs(int(t[i]) - self._get_value(individual, elements))
 
             # fit += abs(int(t[i]) - self._get_value(individual, elements))
         
