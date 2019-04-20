@@ -31,7 +31,7 @@ class GSGP:
     
     def random_expression(self, depth):
         if depth == 1 or random.random() < 1/(2**depth-1):
-            return random.choice((*self.vars, *[str(random.random())] * 10))
+            return random.choice((*self.vars, *[str(random.random()) for i in range(len(self.vars))]))
         else:
             return '(' + random.choice(self.operators) + '(' + \
                 self.random_expression(depth - 1) + ',' + \
@@ -57,13 +57,10 @@ class GSGP:
         rn = self.random_function()
         
         offspring = lambda *x: p(*x) - (self.mutation_rate * (rn(*x) - rm(*x)))
-        # offspring = lambda *x: p(*x) + self.mutation_rate * (rm(*x) * p(*x) - rn(*x) * p(*x))
         offspring = memoize(offspring) # add cache
 
         offspring.geno = lambda: '((' + p.geno() - '(' + str(self.mutation_rate) + '*(' + rm.geno() + '*' + rn.geno() + '))))'
 
-        # offspring.geno = lambda: '((' + p.geno() + str(self.mutation_rate) + '*(' + rm.geno() + '*' + p.geno() + \
-                            # '-' + rn.geno() + '*' + p.geno() + ')))'
         return offspring
     
     def _grade_pop(self):
@@ -87,13 +84,10 @@ class GSGP:
         return [ self.random_function() for i in range(self.pop_size) ]
     
 
-    def _get_value(self, individual, elements):
-        val = individual(*elements)
-        if val > 7:
-            return 7
-        if val < 0:
-            return 0
-        return int(val)
+    def _get_penalty(self, prediction):
+        if prediction < 0 or prediction > 7:
+            return 1000
+        
         
     def fitness(self, individual, X=None, t=None):
         if (X is None) or (t is None):
@@ -102,12 +96,10 @@ class GSGP:
             
         fit = 0
         for i, elements in enumerate(X):
-            fit += abs(int(t[i]) - self._get_value(individual, elements))
+            pred = individual(*elements)
+            fit += abs(t[i] - self._get_penalty(pred))
 
-            # fit += abs(int(t[i]) - self._get_value(individual, elements))
-        
         return fit
-        # return min(fit / len(X), self.max_fitness)
 
     def _tournament_selection(self, parents):
         out = []
