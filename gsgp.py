@@ -87,6 +87,7 @@ class GSGP:
     def _get_penalty(self, prediction):
         if prediction < 0 or prediction > 7:
             return 1000
+        return prediction
         
         
     def fitness(self, individual, X=None, t=None):
