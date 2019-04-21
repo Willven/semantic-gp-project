@@ -93,6 +93,10 @@ class GSGP:
         if prediction < 0 or prediction > 7:
             return 1000
         return prediction
+
+    def _get_value(self, prediction):
+        prediction *= 7
+        return int(prediction)
         
         
     def fitness(self, individual, X=None, t=None):
@@ -103,7 +107,8 @@ class GSGP:
         fit = 0
         for i, elements in enumerate(X):
             pred = individual(*elements)
-            fit += abs(t[i] - self._get_penalty(pred))
+            fit += abs(t[i] - self._get_value(pred))
+            # fit += abs(t[i] - self._get_penalty(pred))
 
         return fit
 
