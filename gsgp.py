@@ -2,7 +2,6 @@ import random
 from tqdm import tqdm
 from util import *
 from statistics import mean
-from math import exp
 
 inf = float('inf')
 
@@ -30,18 +29,14 @@ class GSGP:
         self.max_fitness = max_fitness
         self.tournament_size = tournament_size
     
-    def _random_expression(self, depth):
+    def random_expression(self, depth):
         if depth == 1 or random.random() < 1/(2**depth-1):
             return random.choice((*self.vars, *[str(random.random()) for i in range(len(self.vars))]))
         else:
             return '(' + random.choice(self.operators) + '(' + \
                 self.random_expression(depth - 1) + ',' + \
                 self.random_expression(depth - 1) + '))'
-
-    def random_expression(self, depth):
-        rf = self._random_expression(depth)
-        return '((1/ (1 + exp(-' + rf + '))))'
-    
+        
     def random_function(self):
         re = self.random_expression(self.max_depth)
 
@@ -93,10 +88,6 @@ class GSGP:
         if prediction < 0 or prediction > 7:
             return 1000
         return prediction
-
-    def _get_value(self, prediction):
-        prediction *= 7
-        return int(prediction)
         
         
     def fitness(self, individual, X=None, t=None):
@@ -107,8 +98,7 @@ class GSGP:
         fit = 0
         for i, elements in enumerate(X):
             pred = individual(*elements)
-            fit += abs(t[i] - self._get_value(pred))
-            # fit += abs(t[i] - self._get_penalty(pred))
+            fit += abs(t[i] - self._get_penalty(pred))
 
         return fit
 
