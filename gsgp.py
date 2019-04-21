@@ -40,7 +40,7 @@ class GSGP:
 
     def random_expression(self, depth):
         rf = self._random_expression(depth)
-        return 1/ (1 + exp(-rf))
+        return '((1/ (1 + exp(-' + rf + '))))'
     
     def random_function(self):
         re = self.random_expression(self.max_depth)
